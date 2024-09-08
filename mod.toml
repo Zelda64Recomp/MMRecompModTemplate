@@ -5,7 +5,7 @@
 
 # Unique ID of this mod. Pick something long enough that it'll never be the same as any other mod.
 # The name displayed in the mod management menu is separate from this so this doesn't need to be human readable.
-id = "mm_recomp_testmod"
+id = "mm_recomp_mod_template"
 
 # Version of this mod.
 version = "1.0.0"
