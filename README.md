@@ -21,7 +21,7 @@ You'll also need to build [N64Recomp](https://github.com/N64Recomp/N64Recomp) fo
   * This will produce your mod's `.nrm` file in the build folder.
 * Finally, compile your mod offline.
   * **This part is temporary and only needed while the recomp mod runtime doesn't have LuaJIT recompilation implemented**
-  * Start by running the `OfflineModRecomp` utility (included in the N64Recomp repo). Pass the following arguments: `build/mod_syms.bin build/mod_binary.bin build/mod_recompiled.c`
+  * Start by running the `OfflineModRecomp` utility (included in the N64Recomp repo). Pass the following arguments: `build/mod_syms.bin build/mod_binary.bin Zelda64RecompSyms/mm.us.rev1.syms.toml build/mod_recompiled.c`
   * Next, build the dynamic library from the generated `build/mod_recompiled.c` file and pass `offline_build` as an include path.
     * On Windows, you can run:
       ```
