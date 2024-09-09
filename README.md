@@ -27,6 +27,9 @@ You'll also need to build [N64Recomp](https://github.com/N64Recomp/N64Recomp) fo
       ```
       clang-cl build/mod_recompiled.c -fuse-ld=lld -Z7 /Ioffline_build   MD /O2 /link /DLL /OUT:build/mm_recomp_mod_template-1.0.0.dll
       ```
-      (TODO add offline mod dynamic library build commands for other operating systems)
+      On Linux, you can run:
+      ```
+      clang build/mod_recompiled.c -shared -fvisibility=hidden -fPIC -O2 -Ioffline_build -o build/mm_recomp_mod_template-1.0.0.so
+      ```
     * Make sure your mod's dynamic library and .nrm file have the same filename (besides the extension).
       * e.g. `testmod-1.0.0.nrm` and `testmod-1.0.0.dll`

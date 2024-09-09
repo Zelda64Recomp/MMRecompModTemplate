@@ -9,7 +9,7 @@
 #if defined(_WIN32)
 #define RECOMP_EXPORT __declspec(dllexport)
 #else
-#define RECOMP_EXPORT __attribute__((visibility(default)))
+#define RECOMP_EXPORT __attribute__((visibility("default")))
 #endif
 
 // Compiler definition to disable inter-procedural optimization, allowing multiple functions to be in a single file without breaking interposition.
