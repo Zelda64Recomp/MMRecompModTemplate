@@ -25,7 +25,7 @@ You'll also need to build [N64Recomp](https://github.com/N64Recomp/N64Recomp) fo
   * Next, build the dynamic library from the generated `build/mod_recompiled.c` file and pass `offline_build` as an include path.
     * On Windows, you can run:
       ```
-      clang-cl build/mod_recompiled.c -fuse-ld=lld -Z7 /Ioffline_build   MD /O2 /link /DLL /OUT:build/mm_recomp_mod_template-1.0.0.dll
+      clang-cl build/mod_recompiled.c -fuse-ld=lld -Z7 /Ioffline_build /MD /O2 /link /DLL /OUT:build/mm_recomp_mod_template-1.0.0.dll
       ```
       On Linux, you can run:
       ```
