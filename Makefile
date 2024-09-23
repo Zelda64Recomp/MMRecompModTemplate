@@ -1,8 +1,13 @@
 BUILD_DIR := build
+LIB_DIRS := lib
+MOD_TOML := mod.toml
 
 CC      := clang
 LD      := ld.lld
+MOD_TOOL := ./RecompModTool
 TARGET  := $(BUILD_DIR)/mod.elf
+
+LIBFILES := $(foreach ld, $(LIB_DIRS), $(wildcard $(ld)/*.dll))
 
 LDSCRIPT := mod.ld
 CFLAGS   := -target mips -mips2 -mabi=32 -O2 -G0 -mno-abicalls -mno-odd-spreg -mno-check-zero-division \
@@ -16,15 +21,30 @@ C_SRCS := $(wildcard src/*.c)
 C_OBJS := $(addprefix $(BUILD_DIR)/, $(C_SRCS:.c=.o))
 C_DEPS := $(addprefix $(BUILD_DIR)/, $(C_SRCS:.c=.d))
 
+
+ifeq ($(OS),Windows_NT)
+
+define make_folder
+	mkdir $(subst /,\,$(1))
+endef
+
+else
+
+define make_folder
+	mkdir -p $(1)
+endef
+
+endif
+
+
+$(BUILD_DIR)/mod_binary.bin: $(TARGET) $(MOD_TOML) $(LIBFILES) | $(BUILD_DIR) $(BUILD_DIR)/src
+	$(MOD_TOOL) $(MOD_TOML) $(BUILD_DIR)
+
 $(TARGET): $(C_OBJS) $(LDSCRIPT) | $(BUILD_DIR)
 	$(LD) $(C_OBJS) $(LDFLAGS) -o $@
 
 $(BUILD_DIR) $(BUILD_DIR)/src:
-ifeq ($(OS),Windows_NT)
-	mkdir $(subst /,\,$@)
-else
-	mkdir -p $@
-endif
+	$(call make_folder, $@)
 
 $(C_OBJS): $(BUILD_DIR)/%.o : %.c | $(BUILD_DIR) $(BUILD_DIR)/src
 	$(CC) $(CFLAGS) $(CPPFLAGS) $< -MMD -MF $(@:.o=.d) -c -o $@
