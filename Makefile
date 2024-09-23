@@ -7,8 +7,6 @@ LD      := ld.lld
 MOD_TOOL := ./RecompModTool
 TARGET  := $(BUILD_DIR)/mod.elf
 
-LIBFILES := $(foreach ld, $(LIB_DIRS), $(wildcard $(ld)/*.dll))
-
 LDSCRIPT := mod.ld
 CFLAGS   := -target mips -mips2 -mabi=32 -O2 -G0 -mno-abicalls -mno-odd-spreg -mno-check-zero-division \
 			-fomit-frame-pointer -ffast-math -fno-unsafe-math-optimizations -fno-builtin-memset \
@@ -28,11 +26,15 @@ define make_folder
 	mkdir $(subst /,\,$(1))
 endef
 
+LIBFILES := $(foreach ld, $(LIB_DIRS), $(wildcard $(ld)/*.dll))
+
 else
 
 define make_folder
 	mkdir -p $(1)
 endef
+
+LIBFILES := $(foreach ld, $(LIB_DIRS), $(wildcard $(ld)/*.so))
 
 endif
 
