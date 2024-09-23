@@ -34,7 +34,7 @@ endef
 endif
 
 
-$(BUILD_DIR)/mod_binary.bin: $(TARGET) $(MOD_TOML) | $(BUILD_DIR) $(BUILD_DIR)/src
+$(BUILD_DIR)/mod_binary.bin: $(TARGET) $(MOD_TOML) | $(BUILD_DIR)
 	$(MOD_TOOL) $(MOD_TOML) $(BUILD_DIR)
 
 $(TARGET): $(C_OBJS) $(LDSCRIPT) | $(BUILD_DIR)
