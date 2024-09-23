@@ -16,7 +16,7 @@ On Linux and MacOS, you'll need to also ensure that you have the `zip` utility i
 You'll also need to build [N64Recomp](https://github.com/N64Recomp/N64Recomp) for the `RecompModTool` utility.
 
 ### Building
-* First, make sure that the `RecompModTool` and `OfflineModRecomp` executables are in the root of the mod directory.
+* First, make sure that the `RecompModTool` executable is in the root of the mod directory.
 * Next, run `make` (with an optional job count) to build the mod code itself.
   * This will produce your mod's `.nrm` file in the build folder.
 * Finally, compile your mod offline.

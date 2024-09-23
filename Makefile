@@ -1,5 +1,4 @@
 BUILD_DIR := build
-LIB_DIRS := lib
 MOD_TOML := mod.toml
 
 CC      := clang
@@ -26,20 +25,16 @@ define make_folder
 	mkdir $(subst /,\,$(1))
 endef
 
-LIBFILES := $(foreach ld, $(LIB_DIRS), $(wildcard $(ld)/*.dll))
-
 else
 
 define make_folder
 	mkdir -p $(1)
 endef
 
-LIBFILES := $(foreach ld, $(LIB_DIRS), $(wildcard $(ld)/*.so))
-
 endif
 
 
-$(BUILD_DIR)/mod_binary.bin: $(TARGET) $(MOD_TOML) $(LIBFILES) | $(BUILD_DIR) $(BUILD_DIR)/src
+$(BUILD_DIR)/mod_binary.bin: $(TARGET) $(MOD_TOML) | $(BUILD_DIR) $(BUILD_DIR)/src
 	$(MOD_TOOL) $(MOD_TOML) $(BUILD_DIR)
 
 $(TARGET): $(C_OBJS) $(LDSCRIPT) | $(BUILD_DIR)
