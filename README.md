@@ -17,8 +17,8 @@ On Linux and MacOS, you'll need to also ensure that you have the `zip` utility i
 You'll also need to build [N64Recomp](https://github.com/N64Recomp/N64Recomp) for the `RecompModTool` utility.
 
 ### Building
-* First, run `make` (with an optional job count) to build the mod code itself.
-* Next, run the `RecompModTool` utility with `mod.toml` as the first argument and the build dir (`build` in the case of this template) as the second argument.
+* First, make sure that the `RecompModTool` executable is in the root of the mod directory.
+* Next, run `make` (with an optional job count) to build the mod code itself.
   * This will produce your mod's `.nrm` file in the build folder.
 * Finally, compile your mod offline.
   * **This part is temporary and only needed while the recomp mod runtime doesn't have LuaJIT recompilation implemented**
