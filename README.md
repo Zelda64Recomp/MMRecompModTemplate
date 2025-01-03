@@ -20,17 +20,19 @@ You'll also need to build [N64Recomp](https://github.com/N64Recomp/N64Recomp) fo
 * First, run `make` (with an optional job count) to build the mod code itself.
 * Next, run the `RecompModTool` utility with `mod.toml` as the first argument and the build dir (`build` in the case of this template) as the second argument.
   * This will produce your mod's `.nrm` file in the build folder.
-* Finally, compile your mod offline.
-  * **This part is temporary and only needed while the recomp mod runtime doesn't have LuaJIT recompilation implemented**
-  * Start by running the `OfflineModRecomp` utility (included in the N64Recomp repo). Pass the following arguments: `build/mod_syms.bin build/mod_binary.bin Zelda64RecompSyms/mm.us.rev1.syms.toml build/mod_recompiled.c`
-  * Next, build the dynamic library from the generated `build/mod_recompiled.c` file and pass `offline_build` as an include path.
-    * On Windows, you can run:
-      ```
-      clang-cl build/mod_recompiled.c -fuse-ld=lld -Z7 /Ioffline_build /MD /O2 /link /DLL /OUT:build/mm_recomp_mod_template-1.0.0.dll
-      ```
-      On Linux, you can run:
-      ```
-      clang build/mod_recompiled.c -shared -fvisibility=hidden -fPIC -O2 -Ioffline_build -o build/mm_recomp_mod_template-1.0.0.so
-      ```
-    * Make sure your mod's dynamic library and .nrm file have the same filename (besides the extension).
-      * e.g. `testmod-1.0.0.nrm` and `testmod-1.0.0.dll`
+
+### Updating the Majora's Mask Decompilation Submodule
+Mods can also be made with newer versions of the Majora's Mask decompilation instead of the commit targeted by this repo's submodule.
+To update the commit of the decompilation that you're targeting, follow these steps:
+* Build the [N64Recomp](https://github.com/N64Recomp/N64Recomp) repo and copy the N64Recomp executable to the root of this repository.
+* Build the version of the Majora's Mask decompilation that you want to update to and copy the resulting .elf file to the root of this repository.
+* Update the `mm-decomp` submodule in your clone of this repo to point to the commit you built in the previous step.
+* Run `N64Recomp generate_symbols.toml --dump-context`
+* Rename `dump.toml` and `data_dump.toml` to `mm.us.rev1.syms.toml` and `mm.us.rev1.datasyms.toml` respectively.
+  * Place both files in the `Zelda64RecompSyms` folder.
+* Try building.
+  * If it succeeds, you're done.
+  * If it fails due to a missing header, create an empty header file in the `include/dummy_headers` folder, with the same path.
+    * For example, if it complains that `assets/objects/object_cow/object_cow.h` is missing, create an empty `include/dummy_headers/objects/object_cow.h` file.
+  * If RecompModTool fails due to a function "being marked as a patch but not existing in the original ROM", it's likely that function you're patching was renamed in the Majora's Mask decompilation.
+    * Find the relevant function in the map file for the old decomp commit, then go to that address in the new map file, and update the reference to this function in your code with the new name. 
