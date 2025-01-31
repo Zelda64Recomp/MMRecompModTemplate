@@ -19,6 +19,7 @@ typedef enum {
     EVENT_TYPE_ENABLE,
     EVENT_TYPE_DRAG,
     EVENT_TYPE_TEXT,
+    EVENT_TYPE_UPDATE,
     EVENT_TYPE_COUNT
 } RecompuiEventType;
 
@@ -30,8 +31,20 @@ typedef enum {
 } RecompuiDragPhase;
 
 typedef enum {
+    DISPLAY_NONE,
     DISPLAY_BLOCK,
-    DISPLAY_FLEX
+    DISPLAY_INLINE,
+    DISPLAY_INLINE_BLOCK,
+    DISPLAY_FLOW_ROOT,
+    DISPLAY_FLEX,
+    DISPLAY_INLINE_FLEX,
+    DISPLAY_TABLE,
+    DISPLAY_INLINE_TABLE,
+    DISPLAY_TABLE_ROW,
+    DISPLAY_TABLE_ROW_GROUP,
+    DISPLAY_TABLE_COLUMN,
+    DISPLAY_TABLE_COLUMN_GROUP,
+    DISPLAY_TABLE_CELL
 } RecompuiDisplay;
 
 typedef enum {
@@ -69,16 +82,10 @@ typedef enum {
 } RecompuiOverflow;
 
 typedef enum {
-    UNIT_FLOAT,
+    UNIT_PX,
     UNIT_DP,
     UNIT_PERCENT
 } RecompuiUnit;
-
-typedef enum {
-    ANIMATION_TYPE_NONE,
-    ANIMATION_TYPE_SET,
-    ANIMATION_TYPE_TWEEN
-} RecompuiAnimationType;
 
 typedef enum {
     FONT_STYLE_NORMAL,
@@ -91,6 +98,13 @@ typedef enum {
     TEXT_ALIGN_CENTER,
     TEXT_ALIGN_JUSTIFY
 } RecompuiTextAlign;
+
+typedef enum {
+    TEXT_TRANSFORM_NONE,
+    TEXT_TRANSFORM_CAPITALIZE,
+    TEXT_TRANSFORM_UPPERCASE,
+    TEXT_TRANSFORM_LOWERCASE
+} RecompuiTextTransform;
 
 typedef enum {
     DRAG_NONE,
