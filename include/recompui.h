@@ -6,6 +6,9 @@
 typedef unsigned long RecompuiContext;
 typedef unsigned long RecompuiResource;
 
+// Height of the window in DP units. This is fixed regardless of window size and aspect ratio.
+#define RECOMPUI_TOTAL_HEIGHT 1080.0f
+
 typedef enum {
     CURSOR_NONE,
     CURSOR_POINTER
@@ -182,6 +185,11 @@ RECOMP_IMPORT("*", void recompui_set_margin_left(RecompuiResource id, float marg
 RECOMP_IMPORT("*", void recompui_set_margin_top(RecompuiResource id, float margin, RecompuiUnit unit));
 RECOMP_IMPORT("*", void recompui_set_margin_right(RecompuiResource id, float margin, RecompuiUnit unit));
 RECOMP_IMPORT("*", void recompui_set_margin_bottom(RecompuiResource id, float margin, RecompuiUnit unit));
+RECOMP_IMPORT("*", void recompui_set_margin_auto(RecompuiResource id));
+RECOMP_IMPORT("*", void recompui_set_margin_left_auto(RecompuiResource id));
+RECOMP_IMPORT("*", void recompui_set_margin_top_auto(RecompuiResource id));
+RECOMP_IMPORT("*", void recompui_set_margin_right_auto(RecompuiResource id));
+RECOMP_IMPORT("*", void recompui_set_margin_bottom_auto(RecompuiResource id));
 
 // Borders
 RECOMP_IMPORT("*", void recompui_set_border_width(RecompuiResource id, float width, RecompuiUnit unit));
