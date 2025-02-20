@@ -10,54 +10,107 @@ RECOMP_IMPORT("*", void recomp_free_config_string(char* str));
 
 RecompuiContext context;
 RecompuiResource root;
-RecompuiResource outer_spacer1;
-RecompuiResource outer_spacer2;
-RecompuiResource inner_container;
-RecompuiResource inner_spacer1;
-RecompuiResource inner_spacer2;
+RecompuiResource container;
 RecompuiResource button;
+RecompuiResource button2;
 
 bool context_shown = false;
 
-RecompuiResource create_spacer(RecompuiContext context, RecompuiResource parent, float flex_grow, float flex_shrink, float flex_basis) {
-    RecompuiResource ret = recompui_create_element(context, parent);
-
-    recompui_set_flex_basis(ret, flex_basis, UNIT_DP);
-    recompui_set_flex_grow(ret, flex_grow);
-    recompui_set_flex_shrink(ret, flex_shrink);
-
-    return ret;
+void button_pressed(RecompuiResource resource, const RecompuiEventData* data, void* userdata) {
+    if (data->type == UI_EVENT_CLICK) {
+        if (resource == button) {
+            recomp_printf("Pressed button 1\n");
+        }
+        else {
+            recomp_printf("Pressed close button\n");
+            recompui_hide_context(context);
+            context_shown = false;
+        }
+    }
 }
 
 RECOMP_CALLBACK("*", recomp_on_init)
 void on_init() {
-    context = recompui_create_context();
+    RecompuiColor bg_color;
+    bg_color.r = 255;
+    bg_color.g = 255;
+    bg_color.b = 255;
+    bg_color.a = 0.1f * 255;
 
+    RecompuiColor border_color;
+    border_color.r = 255;
+    border_color.g = 255;
+    border_color.b = 255;
+    border_color.a = 0.2f * 255;
+
+    RecompuiColor modal_color;
+    modal_color.r = 8;
+    modal_color.g = 7;
+    modal_color.b = 13;
+    modal_color.a = 0.9f * 255;
+
+    const float body_padding = 64.0f;
+    const float modal_height = RECOMPUI_TOTAL_HEIGHT - (2 * body_padding);
+    const float modal_max_width = modal_height * (16.0f / 9.0f);
+    const float modal_border_width = 1.1f;
+    const float modal_border_radius = 16.0f;
+
+    context = recompui_create_context();
     recompui_open_context(context);
 
     root = recompui_context_root(context);
+    // Set up the root element so it takes up the full screen.
+    recompui_set_position(root, POSITION_ABSOLUTE);
+    recompui_set_top(root, 0, UNIT_DP);
+    recompui_set_right(root, 0, UNIT_DP);
+    recompui_set_bottom(root, 0, UNIT_DP);
+    recompui_set_left(root, 0, UNIT_DP);
+    recompui_set_width_auto(root);
+    recompui_set_height_auto(root);
 
-    // Split the root into 3 columns.
-    outer_spacer1 = create_spacer(context, root, 1.0f, 0.0f, 0.0f);
+    // Set up the root element's padding so the modal contents don't touch the screen edges.
+    recompui_set_padding(root, body_padding, UNIT_DP);
+    recompui_set_background_color(root, &bg_color);
 
-    inner_container = recompui_create_element(context, root);
-    recompui_set_display(inner_container, DISPLAY_FLEX);
-    recompui_set_flex_direction(inner_container, FLEX_DIRECTION_COLUMN);
+    // Set up the flexbox properties of the root element.
+    recompui_set_flex_direction(root, FLEX_DIRECTION_ROW);
+    recompui_set_justify_content(root, JUSTIFY_CONTENT_CENTER);
 
-    outer_spacer2 = create_spacer(context, root, 1.0f, 0.0f, 0.0f);
+    // Create a container to act as the modal background and hold the elements in the modal.
+    container = recompui_create_element(context, root);
 
-    // Split the middle column up into 3 rows.
-    inner_spacer1 = create_spacer(context, inner_container, 1.0f, 0.0f, 0.0f);
+    // Take up the full height and full width, up to a maximum width.
+    recompui_set_height(container, 100.0f, UNIT_PERCENT);
+    recompui_set_flex_grow(container, 1.0f);
+    recompui_set_max_width(container, modal_max_width, UNIT_DP);
 
-    button = recompui_create_button(context, inner_container, "Mod button", BUTTONSTYLE_PRIMARY);
-    recompui_set_flex_grow(button, 0.0f);
-    recompui_set_flex_shrink(button, 0.0f);
-    recompui_set_flex_basis(button, 100.0f, UNIT_DP);
-    recompui_set_width(button, 200.0f, UNIT_DP);
+    // Set up the flexbox properties of the container.
+    recompui_set_display(container, DISPLAY_FLEX);
+    recompui_set_justify_content(container, JUSTIFY_CONTENT_FLEX_START);
+    recompui_set_flex_direction(container, FLEX_DIRECTION_ROW);
+    recompui_set_padding(container, 16.0f, UNIT_DP);
+    recompui_set_gap(container, 16.0f, UNIT_DP);
+    recompui_set_align_items(container, ALIGN_ITEMS_BASELINE);
     
-    inner_spacer2 = create_spacer(context, inner_container, 1.0f, 0.0f, 0.0f);
+    // Set up the container to be the modal's background.
+    recompui_set_border_width(container, modal_border_width, UNIT_DP);
+    recompui_set_border_radius(container, modal_border_radius, UNIT_DP);
+    recompui_set_border_color(container, &border_color);
+    recompui_set_background_color(container, &modal_color);
 
+    // Create some buttons.
+    button = recompui_create_button(context, container, "Mod button", BUTTONSTYLE_PRIMARY);
+    recompui_set_text_align(button, TEXT_ALIGN_CENTER);
+    
+    button2 = recompui_create_button(context, container, "Close", BUTTONSTYLE_SECONDARY);
+    recompui_set_text_align(button2, TEXT_ALIGN_CENTER);
+
+    recompui_register_callback(button, button_pressed, NULL);
+    recompui_register_callback(button2, button_pressed, NULL);
+    
     recompui_close_context(context);
+
+    context_shown = false;
 }
 
 // Patches a function in the base game that's used to check if the player should quickspin.
@@ -70,14 +123,17 @@ RECOMP_PATCH s32 Player_CanSpinAttack(Player* this) {
         recomp_free_config_string(string_option);
     }
 
-    if (context_shown) {
-        recompui_hide_context(context);
-    }
-    else {
-        recompui_show_context(context);
-    }
-    context_shown = !context_shown;
-
     // Always spin attack.
     return true;
 }
+
+// Hook Play_UpdateMain to check if the L button is pressed and show this mod's UI if so.
+RECOMP_HOOK("Play_UpdateMain") void on_play_update(PlayState* play) {
+    if (CHECK_BTN_ALL(CONTROLLER1(&play->state)->press.button, BTN_L)) {
+        if (!context_shown) {
+            recompui_show_context(context);
+            context_shown = true;
+        }
+    }
+}
+
