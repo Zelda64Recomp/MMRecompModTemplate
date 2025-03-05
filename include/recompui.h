@@ -109,6 +109,13 @@ typedef enum {
     BUTTONSTYLE_SECONDARY,
 } RecompuiButtonStyle;
 
+typedef enum {
+    LABELSTYLE_ANNOTATION,
+    LABELSTYLE_SMALL,
+    LABELSTYLE_NORMAL,
+    LABELSTYLE_LARGE
+} RecompuiLabelStyle;
+
 typedef struct {
     unsigned long type;
     float duration;
@@ -133,9 +140,11 @@ RECOMP_IMPORT("*", void recompui_show_context(RecompuiContext context));
 RECOMP_IMPORT("*", void recompui_hide_context(RecompuiContext context));
 
 // Resources
-RECOMP_IMPORT("*", RecompuiContext recompui_create_style(RecompuiContext context));
-RECOMP_IMPORT("*", RecompuiContext recompui_create_element(RecompuiContext context, RecompuiResource parent));
-RECOMP_IMPORT("*", RecompuiContext recompui_create_button(RecompuiContext context, RecompuiResource parent, const char* text, RecompuiButtonStyle style));
+RECOMP_IMPORT("*", RecompuiResource recompui_create_style(RecompuiContext context));
+RECOMP_IMPORT("*", RecompuiResource recompui_create_element(RecompuiContext context, RecompuiResource parent));
+RECOMP_IMPORT("*", RecompuiResource recompui_create_button(RecompuiContext context, RecompuiResource parent, const char* text, RecompuiButtonStyle style));
+RECOMP_IMPORT("*", RecompuiResource recompui_create_label(RecompuiContext context, RecompuiResource parent, const char* text, RecompuiLabelStyle label_style));
+RECOMP_IMPORT("*", RecompuiResource recompui_create_textinput(RecompuiContext context, RecompuiResource parent));
 
 // Position and Layout
 RECOMP_IMPORT("*", void recompui_set_position(RecompuiResource id, RecompuiPosition position));
@@ -229,6 +238,11 @@ RECOMP_IMPORT("*", void recompui_set_column_gap(RecompuiResource id, float size,
 // Drag and Focus
 RECOMP_IMPORT("*", void recompui_set_drag(RecompuiResource id, RecompuiDrag drag));
 RECOMP_IMPORT("*", void recompui_set_tab_index(RecompuiResource id, RecompuiTabIndex focus));
+
+// Text input
+// !! You must call `recomp_free` on the return value of `recompui_get_input_text` when you're finished with it!
+RECOMP_IMPORT("*", char* recompui_get_input_text(RecompuiResource id));
+RECOMP_IMPORT("*", void recompui_set_input_text(RecompuiResource id, const char* text));
 
 // Callbacks
 typedef void RecompuiEventHandler(RecompuiResource resource, const RecompuiEventData* event, void* userdata);

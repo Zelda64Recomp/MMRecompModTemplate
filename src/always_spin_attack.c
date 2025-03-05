@@ -1,18 +1,17 @@
 #include "modding.h"
 #include "global.h"
+#include "recomputils.h"
+#include "recompconfig.h"
 #include "recompui.h"
-
-RECOMP_IMPORT("*", int recomp_printf(const char* fmt, ...));
-RECOMP_IMPORT("*", u32 recomp_get_config_u32(const char* key));
-RECOMP_IMPORT("*", double recomp_get_config_double(const char* key));
-RECOMP_IMPORT("*", char* recomp_get_config_string(const char* key));
-RECOMP_IMPORT("*", void recomp_free_config_string(char* str));
+#include "z64recomp_api.h"
 
 RecompuiContext context;
 RecompuiResource root;
 RecompuiResource container;
 RecompuiResource button;
 RecompuiResource button2;
+RecompuiResource textinput;
+RecompuiResource textinput_button;
 
 bool context_shown = false;
 
@@ -26,6 +25,14 @@ void button_pressed(RecompuiResource resource, const RecompuiEventData* data, vo
             recompui_hide_context(context);
             context_shown = false;
         }
+    }
+}
+
+void textinput_enter_pressed(RecompuiResource resource, const RecompuiEventData* data, void* userdata) {
+    if (data->type == UI_EVENT_CLICK) {
+        char* textinput_value = recompui_get_input_text(textinput);
+        recomp_printf("  Textinput submitted: %s\n", textinput_value);
+        recomp_free(textinput_value);
     }
 }
 
@@ -73,7 +80,7 @@ void on_init() {
     recompui_set_background_color(root, &bg_color);
 
     // Set up the flexbox properties of the root element.
-    recompui_set_flex_direction(root, FLEX_DIRECTION_ROW);
+    recompui_set_flex_direction(root, FLEX_DIRECTION_COLUMN);
     recompui_set_justify_content(root, JUSTIFY_CONTENT_CENTER);
 
     // Create a container to act as the modal background and hold the elements in the modal.
@@ -105,8 +112,24 @@ void on_init() {
     button2 = recompui_create_button(context, container, "Close", BUTTONSTYLE_SECONDARY);
     recompui_set_text_align(button2, TEXT_ALIGN_CENTER);
 
+    // Bind the shared callback to the two buttons.
     recompui_register_callback(button, button_pressed, NULL);
     recompui_register_callback(button2, button_pressed, NULL);
+
+    // Create a text input
+    textinput = recompui_create_textinput(context, container);
+    recompui_set_flex_grow(textinput, 1.0f);
+    recompui_set_font_size(textinput, 30.0f, UNIT_DP);
+
+    // Create a button to correspond to the text input
+    textinput_button = recompui_create_button(context, container, "Start", BUTTONSTYLE_SECONDARY);
+    recompui_set_text_align(textinput_button, TEXT_ALIGN_CENTER);
+    recompui_set_flex_basis(textinput_button, 150.0f, UNIT_DP);
+    recompui_set_flex_grow(textinput_button, 0.0f);
+    recompui_set_flex_shrink(textinput_button, 0.0f);
+
+    // Bind the callback for the text input button.
+    recompui_register_callback(textinput_button, textinput_enter_pressed, NULL);
     
     recompui_close_context(context);
 

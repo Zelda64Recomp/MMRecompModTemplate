@@ -21,6 +21,8 @@ RECOMP_IMPORT("*", void* z64recomp_get_extended_actor_data(Actor* actor, ActorEx
 
 // Returns the spawn index for a given actor in the current scene. This is an incremental value that starts at 0 when a scene
 // is loaded and counts up by one for every actor spawned.
+// Note that this may not be deterministic for scene spawn list actors, as other mods could potentially spawn additional actors
+// before the scene's spawn list is processed.
 RECOMP_IMPORT("*", u32 z64recomp_get_actor_spawn_index(Actor* actor));
 
 #endif
