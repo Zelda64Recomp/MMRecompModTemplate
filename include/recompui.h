@@ -138,6 +138,8 @@ RECOMP_IMPORT("*", void recompui_close_context(RecompuiContext context));
 RECOMP_IMPORT("*", RecompuiResource recompui_context_root(RecompuiContext context));
 RECOMP_IMPORT("*", void recompui_show_context(RecompuiContext context));
 RECOMP_IMPORT("*", void recompui_hide_context(RecompuiContext context));
+RECOMP_IMPORT("*", void recompui_set_context_captures_input(RecompuiContext context, int captures_input));
+RECOMP_IMPORT("*", void recompui_set_context_captures_mouse(RecompuiContext context, int captures_mouse));
 
 // Resources
 RECOMP_IMPORT("*", RecompuiResource recompui_create_style(RecompuiContext context));
