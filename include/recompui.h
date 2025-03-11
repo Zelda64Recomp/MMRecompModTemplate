@@ -33,6 +33,11 @@ typedef enum {
 } RecompuiDisplay;
 
 typedef enum {
+    VISIBILITY_VISIBLE,
+    VISIBILITY_HIDDEN
+} RecompuiVisibility;
+
+typedef enum {
     POSITION_ABSOLUTE,
     POSITION_RELATIVE
 } RecompuiPosition;
@@ -144,11 +149,13 @@ RECOMP_IMPORT("*", void recompui_set_context_captures_mouse(RecompuiContext cont
 // Resources
 RECOMP_IMPORT("*", RecompuiResource recompui_create_style(RecompuiContext context));
 RECOMP_IMPORT("*", RecompuiResource recompui_create_element(RecompuiContext context, RecompuiResource parent));
+RECOMP_IMPORT("*", RecompuiResource recompui_destroy_element(RecompuiResource parent, RecompuiResource element));
 RECOMP_IMPORT("*", RecompuiResource recompui_create_button(RecompuiContext context, RecompuiResource parent, const char* text, RecompuiButtonStyle style));
 RECOMP_IMPORT("*", RecompuiResource recompui_create_label(RecompuiContext context, RecompuiResource parent, const char* text, RecompuiLabelStyle label_style));
 RECOMP_IMPORT("*", RecompuiResource recompui_create_textinput(RecompuiContext context, RecompuiResource parent));
 
 // Position and Layout
+RECOMP_IMPORT("*", void recompui_set_visibility(RecompuiResource id, RecompuiVisibility visibility));
 RECOMP_IMPORT("*", void recompui_set_position(RecompuiResource id, RecompuiPosition position));
 RECOMP_IMPORT("*", void recompui_set_left(RecompuiResource id, float left, RecompuiUnit unit));
 RECOMP_IMPORT("*", void recompui_set_top(RecompuiResource id, float top, RecompuiUnit unit));
@@ -225,6 +232,7 @@ RECOMP_IMPORT("*", void recompui_set_overflow_x(RecompuiResource id, RecompuiOve
 RECOMP_IMPORT("*", void recompui_set_overflow_y(RecompuiResource id, RecompuiOverflow overflow));
 
 // Text and Fonts
+RECOMP_IMPORT("*", void recompui_set_text(RecompuiResource id, const char* text));
 RECOMP_IMPORT("*", void recompui_set_font_size(RecompuiResource id, float size, RecompuiUnit unit));
 RECOMP_IMPORT("*", void recompui_set_letter_spacing(RecompuiResource id, float spacing, RecompuiUnit unit));
 RECOMP_IMPORT("*", void recompui_set_line_height(RecompuiResource id, float height, RecompuiUnit unit));
