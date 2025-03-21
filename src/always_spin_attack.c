@@ -1,4 +1,5 @@
 #include "modding.h"
+#include "sys_cmpdma.h"
 #include "global.h"
 #include "recomputils.h"
 #include "recompconfig.h"
@@ -13,12 +14,26 @@ RecompuiResource button2;
 RecompuiResource textinput;
 RecompuiResource textinput_button;
 
+RecompuiResource imageview;
+RecompuiTextureHandle bomb_texture_handle;
+u8 bomb_texture_data[ICON_ITEM_TEX_SIZE];
+RecompuiTextureHandle bow_texture_handle;
+u8 bow_texture_data[ICON_ITEM_TEX_SIZE];
+
 bool context_shown = false;
+bool showing_bow = false;
 
 void button_pressed(RecompuiResource resource, const RecompuiEventData* data, void* userdata) {
     if (data->type == UI_EVENT_CLICK) {
         if (resource == button) {
             recomp_printf("Pressed button 1\n");
+            showing_bow = !showing_bow;
+            if (showing_bow) {
+                recompui_set_imageview_texture(imageview, bow_texture_handle);
+            }
+            else {
+                recompui_set_imageview_texture(imageview, bomb_texture_handle);
+            }
         }
         else {
             recomp_printf("Pressed close button\n");
@@ -106,7 +121,7 @@ void on_init() {
     recompui_set_background_color(container, &modal_color);
 
     // Create some buttons.
-    button = recompui_create_button(context, container, "Mod button", BUTTONSTYLE_PRIMARY);
+    button = recompui_create_button(context, container, "Swap item", BUTTONSTYLE_PRIMARY);
     recompui_set_text_align(button, TEXT_ALIGN_CENTER);
     
     button2 = recompui_create_button(context, container, "Close", BUTTONSTYLE_SECONDARY);
@@ -130,7 +145,18 @@ void on_init() {
 
     // Bind the callback for the text input button.
     recompui_register_callback(textinput_button, textinput_enter_pressed, NULL);
-    
+
+    // Load the texture data and create UI textures for the bomb and bow icons.
+    CmpDma_LoadFile(SEGMENT_ROM_START(icon_item_static_yar), ITEM_BOMB, bomb_texture_data, sizeof(bomb_texture_data));
+    bomb_texture_handle = recompui_create_texture_rgba32(bomb_texture_data, ICON_ITEM_TEX_WIDTH, ICON_ITEM_TEX_HEIGHT);
+    CmpDma_LoadFile(SEGMENT_ROM_START(icon_item_static_yar), ITEM_BOW, bow_texture_data, sizeof(bow_texture_data));
+    bow_texture_handle = recompui_create_texture_rgba32(bow_texture_data, ICON_ITEM_TEX_WIDTH, ICON_ITEM_TEX_HEIGHT);
+
+    // Create an imageview for the item icon.
+    imageview = recompui_create_imageview(context, container, bomb_texture_handle);
+    recompui_set_min_width(imageview, 100.0f, UNIT_DP);
+    recompui_set_min_height(imageview, 100.0f, UNIT_DP);
+
     recompui_close_context(context);
 
     context_shown = false;
