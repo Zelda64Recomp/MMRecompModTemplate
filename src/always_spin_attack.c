@@ -68,6 +68,11 @@ void textinput_enter_pressed(RecompuiResource resource, const RecompuiEventData*
 
 RECOMP_CALLBACK("*", recomp_on_init)
 void on_init() {
+    u32 major, minor, patch;
+    recomp_get_mod_version(&major, &minor, &patch);
+
+    recomp_printf("Always spin attack loaded (Version %u.%u.%u)\n", major, minor, patch);
+
     RecompuiColor bg_color;
     bg_color.r = 255;
     bg_color.g = 255;
