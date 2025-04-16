@@ -30,15 +30,15 @@ typedef struct {
         } click;
 
         struct {
-            bool active;
+            int active;
         } focus;
 
         struct {
-            bool active;
+            int active;
         } hover;
 
         struct {
-            bool active;
+            int active;
         } enable;
 
         struct {

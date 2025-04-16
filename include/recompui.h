@@ -54,7 +54,9 @@ typedef enum {
 
 typedef enum {
     FLEX_DIRECTION_ROW,
-    FLEX_DIRECTION_COLUMN
+    FLEX_DIRECTION_COLUMN,
+    FLEX_DIRECTION_ROW_REVERSE,
+    FLEX_DIRECTION_COLUMN_REVERSE
 } RecompuiFlexDirection;
 
 typedef enum {
