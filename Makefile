@@ -2,12 +2,15 @@ BUILD_DIR := build
 
 # Allow the user to specify the compiler and linker on macOS
 # as Apple Clang does not support MIPS architecture
-ifeq ($(shell uname),Darwin)
-    CC      ?= clang
-    LD      ?= ld.lld
-else
+ifeq ($(OS),Windows_NT)
     CC      := clang
     LD      := ld.lld
+else ifneq ($(shell uname),Darwin)
+    CC      := clang
+    LD      := ld.lld
+else
+    CC      ?= clang
+    LD      ?= ld.lld
 endif
 
 TARGET  := $(BUILD_DIR)/mod.elf
