@@ -18,6 +18,11 @@ typedef struct {
     /* 0x8 */ long long rem;
 } lldiv_t;
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 ldiv_t ldiv(long numer, long denom);
 lldiv_t lldiv(long long numer, long long denom);
 
@@ -36,5 +41,11 @@ int snprintf(char* __restrict__ s, size_t n, const char* __restrict__ format, ..
 
 void *malloc( size_t size );
 void free(void* ptr);
+
+int posix_memalign(void **memptr, size_t alignment, size_t size);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* STDLIB_H */
